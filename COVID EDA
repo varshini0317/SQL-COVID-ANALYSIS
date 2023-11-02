@@ -1,0 +1,92 @@
+/*        
+importing the table and inserting values via sql server import and export wizard
+*/
+
+Exploratory analysis
+
+SELECT COUNT(*)
+FROM covid.covid_deaths;
+
+
+SELECT COUN
+FROM covid.covid_vaccination;
+
+
+// Exploratory analysis
+
+// Exploring some important columns of the dataset covid.deaths.xlsx
+
+SELECT date, continent, location, total_cases, new_cases, total_deaths, population
+FROM covid.covid_deaths
+ORDER BY location, date;
+
+
+//Checking for duplicate values
+
+SELECT date, continent, location,
+COUNT(*) as Duplicates
+FROM covid.covid_deaths
+GROUP BY date, continent, location
+HAVING Duplicates > 1
+
+
+COUNT(*) as Duplicates
+FROM covid.covid_vaccination
+GROUP BY date, continent, location
+HAVING Duplicates > 1
+
+
+//Finding continent which is not null
+
+Select *
+FROM covid.covid_deaths
+Where continent is not null 
+order by 3,4
+
+
+Select Location, date, Population, total_cases,  (total_cases/population)*100 as PercentPopulationInfected
+From covid.covid_deaths
+--Where location like '%states%'
+order by 3,4
+   
+
+Select Location, Population, MAX(total_cases) as HighestInfectionCount,  Max((total_cases/population))*100 as PercentPopulationInfected
+From co \vid.covid_deaths
+--Where location like '%states%'
+Group by Location, Population
+order by PercentPopulationInfected desc
+
+
+//Considering the highest value of total cases, which countries have the highest rate of infection in relation to population?¶
+
+SELECT location,
+MAX(total_cases) AS Max_Cases,
+population,
+ROUND(MAX(total_cases / population * 100), 2) AS Pop_Infected(%) FROM covid.covid_deaths
+WHERE continent IS NOT NULL
+GROUP BY location, population
+ORDER BY Perc_Pop_Infected DESC
+LIMIT 5;
+
+
+//finding highest no of deaths
+
+//Countries 
+
+SELECT location,
+MAX(total_deaths) AS Max_Deaths
+FROM covid.covid_deaths
+WHERE continent IS NOT NULL
+GROUP BY location
+ORDER BY Max_of_Deaths DESC;
+
+
+//Continents 
+
+SELECT continent,
+MAX(total_deaths) as Highest_Death
+FROM covid.covid_deaths
+WHERE continent IS NOT NULL
+GROUP BY continent
+ORDER BY Highest_Death DESC;
+
